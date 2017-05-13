@@ -1,0 +1,82 @@
+{% extends "backend/template.twig" %}
+
+{% block backend_css %}
+{{ parent() }}
+{{ asset_css('image-picker.css') | raw }}
+{{ asset_css('bootstrap-select.min.css') | raw }}
+{% endblock %}
+
+{% block backend_content_header %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>{# Set page title and subtitle manually #}
+		{{ content_header }}
+		<small>{{ content_subheader }}</small>
+	</h1>
+	{# Also set breadcrumb manually #}
+	<ol class="breadcrumb">
+		<li><a href="{{ base_url() }}backend">Home</a></li>
+		{% for breadcrumb in breadcrumbs %}
+		<li class="{{ (loop.last ? 'active' : '') }}">
+			{% if breadcrumb.link | length > 0 %}<a href="{{ breadcrumb.link }}">{% endif%}
+			{{ breadcrumb.label }}
+			{% if breadcrumb.link | length > 0 %}</a>{% endif%}
+		</li>
+		{% endfor %}
+	</ol>
+</section>
+{% endblock %}
+
+{% block backend_content %}
+{% if success_message | length > 0 %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ success_message | raw }}
+</div>
+{% endif %}
+
+{% if error_message | length > 0 %}
+<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ error_message | raw }}
+</div>
+{% endif %}
+
+{{ form_open(form_data.attributes, form_data.hidden) | raw }}
+
+{% for fielditem in form_data.fieldset %}
+{{ horizontal_form_input(fielditem) | raw }}
+{% endfor %}
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-10">
+		<button type="submit" class="btn btn-primary">Save</button>
+		<a href="{{ cancel_button_link }}">
+			<button type="button" class="btn btn-default">Cancel</button>
+		</a>
+	</div>
+</div>
+
+{{ form_close() | raw }}
+{% endblock %}
+
+{% block backend_js %}
+{{ parent() }}
+{{ asset_add_path('assets/ckeditor/', 'js') }}
+{{ asset_js('ckeditor.js') | raw }}
+{{ asset_js('adapters/jquery.js') | raw }}
+{{ asset_js('plugins/input-mask/jquery.inputmask.js') | raw }}
+{{ asset_js('plugins/input-mask/jquery.inputmask.date.extensions.js') | raw }}
+{{ asset_js('plugins/input-mask/jquery.inputmask.extensions.js') | raw }}
+{{ asset_js('image-picker.min.js') | raw }}
+{{ asset_js('bootstrap-select.min.js') | raw }}
+<script type="text/javascript">
+	$('textarea.ckeditor').ckeditor();
+    $('input.mask-date').inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"});
+	$('select.image-picker').imagepicker({
+		hide_select : true,
+		show_label  : true
+	});
+	$('select.bootstrap-select').selectpicker();
+</script>
+{% endblock%}

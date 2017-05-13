@@ -1,0 +1,81 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+
+{% block frontend_center_content %}
+    <div class="column register padd-footer">
+        <div class="medium-10 medium-centered columns">
+            <div class="medium-10 medium-centered columns head-regis">
+                <img src="{{ base_url() }}assets/css/images/top-regis.png" style="width: 100%">
+            </div>
+            <form data-abide novalidate action="" method="post">
+                <div class="row">
+                    <div class="small-12 medium-6 medium-centered column no-padding">
+                        <h6 class="create">Create your account and start earning your Point now!</h6>
+                        <hr class="colorgraph">
+                        <div class="small-12 medium-12 column">
+                            <label for="fName" class="middle-label">Display Name :</label>
+                            <input type="text" name="fName" id= "fName" placeholder="John Jefferson" required>
+                    <span class="form-error">
+                        *Required
+                    </span>
+                        </div>
+                        <fieldset>
+                            <div class="small-12 medium-12 column">
+                                <label>Gender :</label>
+                                <input type="radio" name="gender" value="Female" id="Female" required><label for="Female">Female</label>
+                                <input type="radio" name="gender" value="Male" id="Male"><label for="Male">Male</label>
+                            </div>
+                        </fieldset>
+                        <div class="small-12 medium-12 column">
+                            <label for="email" class="middle-label">Email :</label>
+                            <input type="email" name="email" id="email" pattern="email" placeholder="sometext@domain" required>
+                    <span class="form-error">
+                        *Data MissMatch Criteria
+                    </span>
+                        </div>
+                        <div class="small-12 medium-12 column">
+                            <label for="pass" class="middle-label">Password :</label>
+                            <input type="password" name="password" id="pass" placeholder="Minimal 6 Character" required>
+                    <span class="form-error">
+                        *Required
+                    </span>
+                        </div>
+                        <div class="small-12 medium-12 column">
+                            <label for="re-pass" class="middle-label">Retype Password :</label>
+                            <input type="password" id="re-pass" placeholder="Retype-Password"  data-equalto="pass" required>
+                    <span class="form-error">
+                        *Password not match
+                    </span>
+                        </div>
+                        <div data-abide-error class="small-12 column error-msg" style="display:none;">
+                            Please check your input.
+                        </div>
+                        <div class="small-12 column error-msg">
+                            {% if error_message is iterable %}
+                                {% for error in error_message %}
+                                    {{ error.get_message() }}
+                                    {{ loop.index > 0 ? '<br>' : '' }}
+                                {% endfor %}
+                            {% else %}
+                                {{ error_message }}
+                            {% endif %}
+                        </div>
+                        <div class="small-12 column btn-regis">
+                            <input type="submit" class="button small" value="Create Account">
+                            <br>Already have an account? <a href="{{ base_url()}}login">Login</a>
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block frontend_js %}
+   <script>
+        $('#reset').click(function(){
+            $('#fName').focus();
+        });
+   </script>
+{% endblock %}

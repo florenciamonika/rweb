@@ -1,0 +1,100 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+    <div class="column reward-page padd-footer no-padding" data-equalizer="reward-height">
+        <div class="medium-3 columns no-padding" data-equalizer-watch="reward-height">
+            <ul class="tabs vertical" id="example-vert-tabs" data-tabs>
+              {% for brand in brand_reward %}
+              <li class="tabs-title {{ loop.first?'is-active':'' }}"><a href="#panel{{ brand.id }}">{{ brand.name }}</a></li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div class="medium-9 columns no-padding" data-equalizer-watch="reward-height">
+            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs">
+                {% for brand in brand_reward %}
+                    <div class="tabs-panel {{ loop.first?'is-active':'' }}" id="panel{{ brand.id }}">
+                        <div class="small-6 column">
+                            <h4>{{ brand.name }} Reward</h4>
+                        </div>
+
+                        <div class="small-3 column error-msg">
+                           &nbsp; {{ err_msg }}
+                        </div>
+
+                        {% for point in point_user %}
+                            {% if(brand.id==point.brand_id) %}
+                                <div class="small-3 column end text-right">
+                                    Point : {{ point.point }}
+                                </div>
+                            {% elseif point|length==0 %}
+                                <div class="small-3 column end text-right">
+                                    <a href="{{ base_url() }}promo">Join this Promo Now!</a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div style="clear:both"></div>
+                        {% for reward in reward_list %}
+                            {% if(brand.id==reward.brand_id) %}
+                           
+                            <div class="medium-4 small-12 columns brand-reward end" data-equalizer="reward">
+                                <div class="small-12 box columns" data-equalizer-watch="reward">
+                                    <div class="text-center">{{ reward.name }}</div>
+                                    <div class="small-12 columns img-reward">
+                                        <img src="{{ base_url()~reward.get_image_path()~reward.image }}">
+                                    </div>
+                                    <div class="small-12 columns btn-reedem">
+                                        {% if is_login == TRUE %}
+                                        <a class="button" data-open="popup-{{ reward.id }}">{{ reward.point }} point</a>
+                                        {% else %}
+                                        <a class="button" data-open="popup-info">{{ reward.point }} point</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="small-12 medium-4 columns no-padding">
+                                    <div class="reveal confirm" id="popup-{{ reward.id }}" data-reveal>
+                                        <div class="title-confirm"><h5>Confirm</h5></div>
+                                        <div class="small-12 columns padd-confirm">
+                                            <p>Are you sure want to redeem {{ reward.point }} point for this reward?</p>
+                                        </div>
+                                        <div class="small-12 columns">
+                                            <div class="small-6 columns btn-confirm text-right">
+                                                <a data-close class="button">No</a>
+                                            </div>
+                                            <div class="small-6 columns btn-confirm text-left">
+                                                <form method="post" action="{{ base_url() }}thankyou" >
+                                                    <input type="hidden" name="id" value="{{ reward.id }}">
+                                                    <input type="submit"  class="button" value="Yes">
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <button class="close-button" data-close aria-label="Close modal" type="button">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="small-12 medium-4 columns no-padding">
+                                    <div class="reveal confirm" id="popup-info" data-reveal>
+                                        <div class="small-12 columns info-text">
+                                            <h5>You must login to reedem points!</h5>
+                                        </div>
+                                        <div class="small-12 columns">
+                                            <div class="small-12 columns btn-confirm text-center">
+                                                <a href="{{ base_url() }}login" class="button">Login</a>
+                                            </div>
+                                        </div>
+                                        <button class="close-button" style="color: black" data-close aria-label="Close modal" type="button">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

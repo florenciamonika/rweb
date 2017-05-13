@@ -1,0 +1,44 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+
+{% block frontend_center_content %}
+    <form data-abide novalidate action="" method="post">
+        <div class="column login padd-footer">
+            <div class="small-12 medium-4 medium-centered column">
+                <div class="small-12 column title-form">
+                    <img src="{{ base_url() }}assets/css/images/customer-icon.png" style="width: 20px;"> User Login
+                </div>
+                <hr class="colorgraph">
+                <div class="small-12 column success-msg">
+                    {{ success_regis }}
+                </div>
+                <div class="small-12 columns login-fb">
+                    <a href="{{ fb_login }}"><img src="{{ base_url() }}assets/css/images/login-with-fb.png"></a>
+                    <p>or</p>
+                </div>
+                <div class="small-12 medium-12 column">
+                    <input type="email" name="email" id="email" pattern="email" placeholder="Your email" required>
+                    <span class="form-error">
+                        *Input Your Email
+                    </span>
+                </div>
+                <div class="small-12 medium-12 column">
+                    <input type="password" name="password" id="pass" placeholder="Password" required>
+                    <span class="form-error">
+                        *Required
+                    </span>
+                </div>
+                <div class="small-12 column error-msg">
+                    {{ login_message }}{{ fail_fb }} {{ please_login }}
+                </div>
+                <div class="small-12 column text-center">
+                    <input type="submit" class="button small btn-login" name="login" value="Login">
+                    <br>Don't have an account? <a href="{{ base_url()}}register">Register</a>
+                </div>
+                {#<a href="{{ fb_login }}"><button type="button" class="button small">Login with Facebook</button></a>#}
+
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

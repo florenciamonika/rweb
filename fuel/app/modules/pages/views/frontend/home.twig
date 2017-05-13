@@ -1,0 +1,134 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_banner %}
+    <ul class="bxslider">
+        {% for slide in banner_data %}
+            <li>
+                <a href="{{ slide.url_link }}"><img src="{{ base_url()~slide.get_image_path()~slide.filename }}" alt="{{ slide.name }}"/></a>
+            </li>
+        {% endfor %}
+	</ul>
+{% endblock %}
+
+{% block frontend_center_content %}
+    <div class="column head">
+        <div class="small-12 medium-10 medium-centered columns">
+        <div class="headline">
+            <h2>Register - Earn Point - Reedem - Repeat</h2>
+        </div>
+        <div class="medium-10 medium-centered small-12 columns welcome">
+            Welcome to Rewards where every point you earn can lead to something wonderful.
+            Join the promo to get your Points. Check your Points balance, redeem Points online or manage your Rewards settings.
+        </div>
+        <div class="small-12 columns info">
+            <div class="medium-6 medium-centered small-10 small-centered columns">
+                <div class="medium-12 columns detail">
+                    <div class="icon">
+                        <img src="{{ base_url() }}assets/css/images/customer-icon.png">
+                    </div>
+                    <h4>Join to get your Points</h4>
+                    <p>Check your Reward Points balance today and explore our collection of redemption options.</p>
+                    <div class="small-12 columns" style="text-align: center;">
+                        <div class="button regis"><a href="{{ base_url() }}register">Join now</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    </div>
+
+    <div class="column middle-home">
+        <div class="small-12 medium-10 medium-centered columns wrap" data-equalizer="home">
+            <div class="small-12 medium-5 columns middle-right" data-equalizer-watch="home">
+                <img src="{{ base_url() }}assets/css/images/people.png">
+            </div>
+            <div class="small-12 medium-7 columns middle-left" data-equalizer-watch="home">
+                <div class="middle-content">
+                    <div class="icon"><img src="{{ base_url() }}assets/css/images/chat.png"></div>
+                    <div class="desc-info">
+                        <h3>Share daily promo and earn<br/>your point</h3>
+                        <p>To get more point, you can share daily promo in your social media or watching video in this promo. </p>
+                    </div>
+                    <div class="btn-join">
+                        <a href="{{ base_url() }}promo"><h5>Start earning now...</h5></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column benefit-home">
+    <div class="small-12 medium-10 medium-centered columns">
+        <div class="headline">
+            <h2>BENEFIT OF REWARDS</h2>
+        </div>
+        <div class="medium-12 small-12 end columns welcome">
+            Every point you earn can lead to something wonderful. You can get so many items with your point !
+            Check your Reward Points balance today and explore our collection of redemption options.
+        </div>
+        <div class="small-12 columns">
+            <div class="medium-12 small-12 columns" data-equalizer="benefit" style="margin-top: 50px;margin-bottom: 20px;">
+                {% for list in list_reward | slice(0, 3)%}
+                <div class="small-12 medium-4 box columns" data-equalizer-watch="benefit">
+                    <a href="{{ base_url() }}reward/{{list.id}}">
+                        <div class="reward">
+                            <div class="img">
+                                <img src="{{ base_url()~list.get_image_path()~list.image }}">
+                            </div>
+                            <div class="poin">
+                                <span>{{ list.point }} pts</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                <div style="clear:both;"></div>
+            </div>
+            <div class="medium-12 small-12 columns button-more">
+                <a href="{{ base_url() }}reward"><div class="button">View more Reward</div></a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="column news-home">
+	<div class="small-12 medium-10 medium-centered columns">
+        <div class="menu-title">
+            <h2>NEWS</h2>
+        </div>
+		<div class="small-12 columns" data-equalizer="news">
+            {% for news in list_news | slice(0, 3) %}
+            <a href="{{ base_url() }}news_detail/{{ news.id }}">
+			<div class="small-12 medium-4 columns">
+                <div class="small-12 columns content-news" data-equalizer-watch="news">
+                    <div class="small-12 medium-12 columns img no-padding">
+                        <img src="{{ base_url()~news.get_image_path()~'thumbnail/'~news.image }}" />
+                    </div>
+                    <div class="small-12 medium-12 columns no-padding">
+                        <div class="small-12 columns news-title no-padding">
+                            {{ news.title }}
+                        </div>
+                        <div class="small-12 columns news-desc no-padding">
+                            {{ news.highlight }}
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+			</div>
+            </a>
+            {% endfor %}
+		</div>
+
+	</div>
+    </div>
+{% endblock %}
+
+{% block frontend_js %}
+	<script src="{{ base_url() }}assets/js/jquery.bxslider.min.js"></script>
+	<script>
+		$(document).ready(function(){
+		  $('.bxslider').bxSlider();
+        });
+	</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+    <div class="columns news-detail padd-footer">
+	<div class="small-12 medium-10 medium-centered columns">
+    {% for news in news_detail %}
+		<div class="small-12 title-newsdetail">
+            <h2>{{ news.title }}</h2>
+            <p class="date">Posted on {{ news.created_at|date("d F Y") }}</p>
+            <img src="{{ base_url()~news.get_image_path()~news.image }}">
+		</div>
+		<div class="small-12 desc">
+			{{ news.description }}
+		</div>
+        <div class="small-12 columns share-detail">
+            <div class="btn">
+                <p>Share with your friend</p>
+                <ul>
+                    <li><a href="#" ><img src="{{ base_url() }}assets/css/images/twitter-share.png"></a></li>
+                    <li><a href="#" class="facebook-share" id="{{ news.id }}"><img src="{{ base_url() }}assets/css/images/fb-share.png"></a></li>
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+	</div>
+    </div>
+    
+{% endblock %}
+
+{% block frontend_js %}
+<script>
+$(document).ready(function(){
+    $('.facebook-share').on('click', function(){
+        var news_id = $(this).attr('id');
+        var loc = location.href;
+        FB.ui({
+            display: 'popup',
+            method:  'share',
+            href: 'http://facebook.com',
+            //href: loc,
+        },function(response) {
+            if (response) {
+            //if(true){
+                    $.ajax({
+                        url : '{{ base_url() }}/done',
+                        method : 'post',
+                        data : { 'id':news_id, 'type':'Share'},
+                    });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

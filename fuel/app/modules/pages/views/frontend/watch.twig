@@ -1,0 +1,75 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+<div class="Small-12 columns uplayer">
+   <iframe id="player" width="720" height="405" class="uplayer" task="{{watch_detail.id}}" src="https://www.youtube.com/embed/{{ watch_detail.description }}?enablejsapi=1"  frameborder="0" allowfullscreen></iframe>
+   <p id="display"></p>
+</div>
+{% endblock %}
+
+{% block frontend_js %}
+<script>
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+var task_id,player, timer, timeSpent = [], display = document.getElementById('display'),flag=0;
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player( 'player', {
+        events: { 'onStateChange': onPlayerStateChange }
+    });    
+}
+
+function onPlayerStateChange(event) {
+    if(event.data === 1) { // Started playing
+        task_id = $('#player').attr('task');
+        if(!timeSpent.length){
+            for(var i=0, l=parseInt(player.getDuration()); i<l; i++) timeSpent.push(false);
+        }
+        timer = setInterval(record,100);
+
+    } else {
+        clearInterval(timer);
+    }
+
+}
+
+function record(){
+    timeSpent[ parseInt(player.getCurrentTime()) ] = true;
+    showPercentage();
+}
+
+function showPercentage(){
+    var percent = 0;
+    for(var i=0, l=timeSpent.length; i<l; i++){
+        if(timeSpent[i]) percent++;
+    }
+    percent = Math.round(percent / timeSpent.length * 100);
+    display.innerHTML = percent + "%";
+
+    //If video watch more than 99% length
+    if(percent>85 && flag!=1){
+        console.log('addpoint');
+        addpoint();
+    }
+}
+
+function addpoint(){
+    flag=1;
+    $.ajax({
+        url : '{{ base_url() }}/done',
+        method : 'post',
+        data : { 'id':task_id, 'type':'Watch'},
+        error : function(response){
+            alert("Something happened, try again!");
+            flag=0;
+        },
+        success : function(response) {
+            alert("Task done !");
+        }
+    });
+}
+</script>
+{% endblock %}

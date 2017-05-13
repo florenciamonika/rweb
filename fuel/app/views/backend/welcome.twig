@@ -1,0 +1,23 @@
+{% extends "backend/template.twig" %}
+
+{% block backend_content_header %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>{# Set page title and subtitle manually #}
+		Dashboard
+		<small>Welcome</small>
+	</h1>
+	{# Also set breadcrumb manually #}
+	<ol class="breadcrumb">
+		<li><a href="{{ base_url() }}backend">Home</a></li>
+		<li class="active">Dashboard</li>
+	</ol>
+</section>
+{% endblock %}
+
+{% block backend_content %}
+	<h4>WELCOME</h4>
+	<div>
+		This is Admin Page For Manage this site - Ganbate!
+	</div>
+{% endblock %}

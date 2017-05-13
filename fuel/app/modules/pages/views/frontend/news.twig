@@ -1,0 +1,56 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_banner %}
+    <img src="{{ base_url() }}assets/css/images/news-banner.jpg" style="width: 100%;" />
+{% endblock %}
+{% block frontend_center_content %}
+    <div class="column news-page padd-footer">
+    <div class="small-12 medium-10 medium-centered columns">
+        {% for news in list_news %}
+        <div class="medium-12 small-12 columns">
+            <div class="small-12 columns detail-newspage">
+                <div class="small-12 columns title no-padding">
+                    {{ news.title }}
+                </div>
+                <div class="small-12 columns news-headline no-padding" data-equalizer="news">
+                    <div class="medium-4 small-12 columns no-padding" data-equalizer-watch="news">
+                        <img src="{{ base_url()~news.get_image_path()~'thumbnail/'~news.image }}" />
+                    </div>
+                    <div class="medium-8 small-12 columns no-right-padding" data-equalizer-watch="news">
+                        <div class=" small-12 medium-12 columns post-date">
+                            Posted on {{ news.date|date("d F Y") }}
+                        </div>
+                        {{ news.highlight }}
+                        <p class="more"><a href="{{ base_url() }}news_detail/{{ news.id }}">Read more <img src="{{ base_url() }}assets/css/images/right.png"></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block frontend_js %}
+<script>
+$(document).ready(function(){
+    $('.facebook-share').on('click', function(){
+        var news_id = $(this).attr('id');
+        FB.ui({
+            display: 'popup',
+            method:  'share',
+            href: 'http://facebook.com',
+        },function(response) {
+            if (response && response.post_id) {
+                    $.ajax({
+                        url : '{{ base_url() }}/done',
+                        method : 'post',
+                        data : {news_id},
+                    });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

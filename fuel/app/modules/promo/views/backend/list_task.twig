@@ -1,0 +1,136 @@
+{% extends "backend/template.twig" %}
+
+{% block backend_css %}
+	{{ parent() }}
+	<!-- dataTables css -->
+	{{ asset_css('datatables/dataTables.bootstrap.css') | raw }}
+{% endblock %}
+
+{% block backend_content_header %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>{# Set page title and subtitle manually #}
+		Task
+		<small>List</small>
+	</h1>
+	{# Also set breadcrumb manually #}
+	<ol class="breadcrumb">
+		<li><a href="{{ base_url() }}backend">Home</a></li>
+		<li class="active">Task List</li>
+	</ol>
+</section>
+{% endblock %}
+
+{% block backend_content %}
+
+{% if success_message | length > 0 %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ success_message | raw }}
+</div>
+{% endif %}
+
+{% if error_message | length > 0 %}
+<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ error_message | raw }}
+</div>
+{% endif %}
+
+	<div class="box box-solid">
+		<div class="box-body text-right">
+			<a href="{{ base_url() }}backend/task/add">
+				<button class="btn btn-default">Create</button>
+			</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-body table-responsive">
+					<table id="table-task" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+                            <th>ID</th>
+                            <th>Promo</th>
+                            <th>Name</th>
+                            <th>URL Link</th>
+                            <th>Image</th>
+                            <th>Type</th>
+                            <th>Point</th>
+                            <th>Status</th>
+                            <th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for task in task_list %}
+						<tr>
+                            <td>{{ task.id }}</td>
+							<td>{{ task.get_promo_name() }}</td>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.description }}</td>
+                            <td>
+                                <img src="{{ base_url()~task.get_image_path()~'thumbnail/'~task.image }}" />
+                            </td>
+                            <td>{{ task.type }}</td>
+                            <td>{{ task.point }}</td>
+                            <td>{{ task.get_status_name() }}</td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+                                                                            <li><a href="{{ base_url() }}backend/task/edit/{{ task.id }}">Edit</a></li>
+                                                                            <li><a class="btn-delete" data-url-delete="{{ base_url() }}backend/task/delete/{{ task.id }}" href="#">Delete</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					</table>
+				</div><!-- /.box-body -->
+			</div><!-- /.box -->
+		</div>
+	</div>
+{% endblock %}
+		
+{% block backend_js %}
+	{{ parent() }}
+	<!-- DATA TABES SCRIPT -->
+	{{ asset_js('plugins/datatables/jquery.dataTables.js') | raw }}
+	{{ asset_js('plugins/datatables/dataTables.bootstrap.js') | raw }}
+	<!-- custom script -->
+	<script type="text/javascript">
+		$(function() {
+			$("#table-task").dataTable( {
+				"aoColumns": [ 
+					null,
+					null,
+					null,
+                    null,
+                    null,
+                    null,
+                    null,
+					{ "bSearchable": false, "bSortable": false }
+				]
+			} );
+		} );
+	</script>
+	<!-- Dialog Confirmation Script -->
+	{{ asset_js('backend-dialog.js') | raw }}
+	<script type="text/javascript">
+		jQuery('#table-task').on('click', '.btn-delete', function(e){
+			e.preventDefault();
+			var my = jQuery(this),
+				url_del = my.data('url-delete');
+			var yes_callback = function(e){
+				e.preventDefault();
+				jQuery(location).attr('href', url_del);
+			}
+			backend_dialog.show_dialog_confirm('Are you sure want to delete this?', yes_callback);
+		});
+        
+	</script>
+{% endblock %}{# empty Twig template #}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rweb | Active, Share, Reward</title>
+	<link rel="stylesheet" href="{{ base_url() }}assets/foundation/css/foundation.min.css"/>
+    <link rel="stylesheet" href="{{ base_url() }}assets/css/jquery.bxslider.css">
+	<link rel="stylesheet" href="{{ base_url() }}assets/css/custom/style.css" />
+    {#Font type#}
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+  {% block frontend_css %} {% endblock %}
+  {% block head_js %}{% endblock %}
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+  <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+    <!-- off-canvas title bar for 'small' screen -->
+    <div class="title-bar" data-responsive-toggle="widemenu" data-hide-for="medium">
+      <div class="title-bar-left home-icon">
+        <a href="{{ base_url() }}">
+        	<img src="{{ base_url() }}/assets/css/images/logo.png">
+        </a>
+        {#<span class="title-bar-title">Rweb</span>#}
+
+      </div>
+
+      <div class="title-bar-right">
+        <button class="menu-icon" type="button" data-open="offCanvasRight"></button>
+      </div>
+
+    </div>
+    <!-- off-canvas right menu -->
+    <div class="off-canvas position-right" id="offCanvasRight" data-off-canvas data-position="right" data-hide-for="medium">
+
+      <ul class="vertical menu">
+          {% if is_login == FALSE  %}
+              <li><a href="{{ base_url() }}login">Login</a></li>
+              <li><a href="{{ base_url() }}news">News</a></li>
+              <li><a href="{{ base_url() }}promo">Promo</a></li>
+              <li><a href="{{ base_url() }}reward">Reward</a></li>
+          {% endif %}
+          {% if is_login == TRUE %}
+              <li>
+                  <a href="{{ base_url() }}profile">{{ member.fName }}</a>
+              </li>
+              <li><a href="{{ base_url() }}news">News</a></li>
+              <li><a href="{{ base_url() }}promo">Promo</a></li>
+              <li><a href="{{ base_url() }}reward">Reward</a></li>
+              <li><a href="{{ base_url() }}task">Task</a></li>
+              <li><a href="{{ base_url() }}logout">Logout</a></li>
+          {% endif %}
+
+      </ul>
+
+    </div>
+
+
+
+    <!-- "wider" top-bar menu for 'medium' and up -->
+<div data-sticky-container>
+        <div id="widemenu" class="top-bar sticky is-stuck is-at-top" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="1" data-btm-anchor="content:bottom">
+      <div class="top-bar-left">
+        <ul class="menu">
+          <li class="logo"><a href="{{ base_url() }}"><img src="{{ base_url() }}/assets/css/images/logo.png"></a></li>
+          <li><a href="{{ base_url() }}news">News</a></li>
+          <li><a href="{{ base_url() }}promo">Promo</a></li>
+          <li><a href="{{ base_url() }}reward">Reward</a></li>
+          {% if is_login == TRUE %}
+          <li><a href="{{ base_url() }}task">Task</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="top-bar-right">
+        <ul class="dropdown menu" data-dropdown-menu>
+          {% if is_login == FALSE  %}
+              <li><a href="{{ base_url() }}login">Login</a></li>
+              <li class="started-home"><a href="{{ base_url() }}register">Get started</a></li>
+          {% endif %}
+          {% if is_login == TRUE %}
+          <li>
+            <a href="#">Hello, {{ member.fName }}</a>
+            <ul class="menu">
+              <li><a href="{{ base_url() }}profile">Edit Profile</a></li>
+              <li><a href="{{ base_url() }}logout">Logout</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+</div>
+
+    <!-- original content goes in this container -->
+
+    <div class="off-canvas-content" data-off-canvas-content>
+
+      {% block frontend_banner %}{% endblock %}
+      
+      <div class="column content no-padding">
+
+        {% block frontend_center_content %}{% endblock %}
+
+      </div>
+
+    </div>
+  <!-- close wrapper, no more content after this -->
+
+  </div>
+    <footer class="medium-12 columns footer">
+        <div class="medium-6 columns no-padd footer-left">
+            <ul>
+                <li class="logo">
+                    <img src="{{ base_url() }}assets/css/images/logo-footer.png"/>
+                </li>
+                <li>
+                    <span class="copyright">Copyright &copy; 2016 All Rights Reserved</span>
+                </li>
+            </ul>
+        </div>
+        <div class="medium-6 columns no-padd footer-right">
+            <ul>
+                <li>
+                    <ul class="social-media">
+                        <li>
+                            <a href="" target="_blank" class="instagram"><img src="{{ base_url() }}assets/css/images/instagram.png"/></a>
+                        </li>
+                        <li>
+                            <a href="" target="_blank" class="twit"><img src="{{ base_url() }}assets/css/images/twitter.png"/></a>
+                        </li>
+                        <li>
+                            <a href="" target="_blank" class="facebook"><img src="{{ base_url() }}assets/css/images/fb.png"/></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</div>
+
+<script src="{{ base_url() }}assets/js/jquery.min.js"></script>
+<script src="{{ base_url() }}assets/foundation/js/vendor/jquery.js"></script>
+<script src="{{ base_url() }}assets/foundation/js/vendor/what-input.js"></script>
+<script src="{{ base_url() }}assets/foundation/js/vendor/foundation.min.js"></script>
+<script src="{{ base_url() }}assets/foundation/js/app.js"></script>
+<script>
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '200434553745901',
+            xfbml      : true,
+            version    : 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+        FB.Event.subscribe('edge.create', function (url) {
+            //console.log(response);
+            validlike(url);
+        });
+        FB.Event.subscribe('edge.remove', function (response) {
+            alert('DisLiked')
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+</script>
+{% block frontend_js %}{% endblock %}
+</body>
+</html>

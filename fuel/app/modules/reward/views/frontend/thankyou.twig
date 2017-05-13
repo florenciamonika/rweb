@@ -1,0 +1,15 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+    <div class="column thankyou-page padd-footer">
+        <div class="medium-10 medium-centered columns">
+            <div class="head-thank">
+                <h1>Thank You!</h1>
+                <img src="{{ base_url() }}assets/css/images/thankyou.png">
+                <p>Your redeem is success !<br>
+                Back to promo and earn more point</p>
+                <a href="{{ base_url() }}promo" class="button">Back to promo</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

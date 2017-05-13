@@ -1,0 +1,84 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+    <div class="column profile padd-footer">
+        <div class="medium-8 medium-centered columns">
+            {#<h2>Edit Profile</h2>#}
+            {#<div class="medium-4 columns">#}
+                {#<img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">#}
+                {#<h6>Upload a different photo...</h6>#}
+                {#<input type="file" class="text-center center-block well well-sm">#}
+            {#</div>#}
+            <div class="medium-8 medium-centered small-12 columns form-profile">
+                <h3>Edit your profile</h3>
+                <form data-abide novalidate action="" method="post">
+                    <div class="small-12 columns no-padding">
+                        <input type="text" value="{{ profile.fName }}" name="fName" required placeholder="Full Name" id="name">
+                        <span class="form-error">
+                            *Check your input
+                        </span>
+                    </div>
+
+                    <div class="small-12 columns no-padding">
+                        <input type="email" value="{{ profile.email }}" name="email" id="email" disabled>
+                        <span class="form-error">
+                            *Check your input
+                        </span>
+                    </div>
+
+                    <div class="small-12 columns no-padding">
+                        <input type="text" value="{{ profile.phone }}" name="phone" id="phone" required placeholder="+62" pattern="[0-9]">
+                        <span class="form-error">
+                            *Check your input
+                        </span>
+                    </div>
+
+                    <div class="small-12 columns no-padding">
+                    <fieldset>
+                        <div class="small-12 medium-2 column text-label no-left-padding">
+                            <label>Gender :</label>
+                        </div>
+                        <div class="small-12 medium-10 column">
+                            <input type="radio" name="gender" value="Female" id="Female" required {{ profile.gender=='Female' ? 'checked' : ''}}><label for="Female">Female</label>
+                            <input type="radio" name="gender" value="Male" id="Male" {{ profile.gender=='Male' ? 'checked' : ''}}><label for="Male">Male</label>
+                        </div>
+                    </fieldset>
+                        </div>
+
+                    <div class="small-12 columns no-padding">
+                        <textarea id="address" required name="address" required>{{ profile.address }}</textarea>
+                        <span class="form-error">
+                            *Check your input
+                        </span>
+                    </div>
+                    <div class="small-12 columns no-padding">
+                        <input type="password" name="new-password" id="new-pass" placeholder="Minimal 6 Character">
+                    </div>
+                    <div class="small-12 columns no-padding">
+                        <input type="password" id="re-pass" placeholder="Retype-Password"  data-equalto="new-pass">
+                        <span class="form-error">
+                            *Password not match
+                        </span>
+                    </div>
+
+                    <div class="small-12 column error-msg">
+                        {% if error_message is iterable %}
+                            {% for error in error_message %}
+                                {{ error.get_message() }}
+                                    {{ loop.index > 0 ? '<br>' : '' }}
+                                {% endfor %}
+                            {% else %}
+                                {{ error_message }}
+                        {% endif %}
+                    </div>
+                    <div class="small-12 column success-msg">
+                        {{ success_update }}
+                    </div>
+                    <div class="medium-12 columns save-btn">
+                        <input type="submit" class="button" value="Save Changes">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

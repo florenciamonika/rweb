@@ -1,0 +1,80 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_center_content %}
+    <div class="column promo padd-footer">
+        <div class="small-12 medium-10 medium-centered columns">
+            <div class="menu-title">
+                Promo
+                <hr>
+            </div>
+            <div class="small-12 column text-center error-validate">
+				{{ validate_user_promo }}
+			</div>
+			{% for list_promo in list_promo %}
+            <div class="small-12 medium-6 large-4 columns description end" style="margin-bottom:35px">
+                <div class="pos-rel" data-equalizer="promo">
+	                <div class="small-12 columns no-padding" data-equalizer-watch="promo">
+                        <img src="{{ base_url()~list_promo.get_image_path()~list_promo.image }}">
+	                </div>
+	                <div class="small-12 columns small-promo-desc show-for-small-only" style="background-color:black">
+	                    <div class="promo-title">
+	                        {{ list_promo.name }}
+	                    </div>
+	                    <div class="small-12 columns promo-brief">
+	                        Slot : {{ list_promo.slot }} <br> 
+							{{ list_promo.description }}
+	                    </div>
+	                    <div class="small-12 columns">
+	                        <div class="small-6 columns text-right">
+	                            <a href="{{base_url()}}{{ list_promo.id }}"><button type="button" class="button small">View</button></a>
+	                        </div>
+	                        <div class="small-6 columns">
+	                            <form method="post" action="{{ base_url() }}join" >
+									<input type="hidden" name="id" value="{{ list_promo.id }}">
+			                        <input type="submit"  class="button small" value="Join">
+			                    </form>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="small-12 columns black-hover pos-abs hide-for-small-only" data-equalizer-watch="promo"></div>
+	                <div class="small-12 columns pos-abs promo-desc hide-for-small-only">
+	                    <div class="promo-title">
+	                        {{ list_promo.name }}
+	                    </div>
+	                    <div class="small-12 columns promo-brief">
+	                        Slot : {{ list_promo.slot }} <br> 
+							{{ list_promo.description }}
+	                    </div>
+	                    <div class="small-12 columns">
+	                        <div class="small-6 columns text-right">
+	                            <a href="{{ base_url() }}news_detail/{{ list_promo.news.id }}"><button type="button" class="button small">View</button></a>
+	                        </div>
+	                        <div class="small-6 columns">
+	                            <form method="post" action="{{ base_url() }}join" >
+									<input type="hidden" name="id" value="{{ list_promo.id }}">
+			                        <input type="submit"  class="button small" value="Join">
+			                    </form>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+                <div style="clear:both"></div>
+	        </div>
+	        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block frontend_js %}
+	<script>
+	$(document).ready(function(){
+		$(".description").hover(function(){
+			$(this).find(".black-hover").css({"z-index":"1","opacity":"0.7"});
+			$(this).find(".promo-desc").css("z-index","2");
+		},function(){
+			$(this).find(".black-hover").css({"z-index":"-1","opacity":"0"});
+			$(this).find(".promo-desc").css("z-index","-2");
+		});
+	});
+	</script>
+{% endblock %}

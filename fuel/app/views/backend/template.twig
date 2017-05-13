@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="bg-black">
+    <head>
+        <meta charset="UTF-8">
+		<title>{{ config('config_cms.cms_name') }} | {{ meta_title }}</title>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+        {% block backend_css %}
+		<!-- bootstrap 3.0.2 -->
+		{{ asset_css('bootstrap.min.css') | raw }}
+        
+        <!-- font Awesome -->
+		{{ asset_css('font-awesome.min.css') | raw }}
+        
+        <!-- Theme style -->
+		{{ asset_css('AdminLTE.css') | raw }}
+		{% endblock %}
+		
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="{{ body_tag_class }}">
+		<div id="dialog-confirm" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<p class="confirm-msg"></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+						<button type="button" class="btn btn-primary">Yes</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<!-- header logo: style can be found in header.less -->
+        <header class="header">
+            <a href="{{ base_url() }}backend" class="logo">
+                <!-- Add the class icon to your logo image or logo icon to add the margining -->
+				{{ config('config_cms.cms_name') }}
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <i class="caret"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+									{% if current_admin_photo | length > 0 %}
+									<img src="{{ base_url() }}media/admin/photos/{{ current_admin_photo }}" alt="Admin Photo" />
+									{% else %}
+									<i class="fa fa-user fa-5x"></i>
+									{% endif %}
+                                    <p>
+										{{ current_admin_fullname }}
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="col-xs-8 text-left">
+                                        <a href="{{ base_url() }}backend/change-password">Change Password</a>
+                                    </div>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="{{ base_url() }}backend/my-profile" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{{ base_url() }}backend/sign-out" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="wrapper row-offcanvas row-offcanvas-left">
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="left-side sidebar-offcanvas">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+					<ul class="sidebar-menu">
+					{% for menu_key, menu in cms_menus %}
+						{% set has_submenu = (menu.submenus | length > 0) ? true : false %}
+						{% if not has_submenu %}
+							{% set menu_active_class = (menu_key == menu_current_key) ? 'active' : '' %}
+							<li class="{{ menu_active_class }}">
+								<a href="{{ base_url() ~ menu.route }}">
+									<i class="{{ menu.icon_class }}"></i>
+									<span>{{ menu.label }}</span>
+								</a>
+							</li>
+						{% else %}
+							{% set menu_active_class = (menu_key == menu_parent_key) ? 'active' : '' %}
+							<li class="treeview {{ menu_active_class }}">
+								<a href="javascript:void(0)">
+									<i class="{{ menu.icon_class }}"></i>
+									<span>{{ menu.label }}</span>
+									<i class="fa fa-angle-left pull-right"></i>
+								</a>
+								<ul class="treeview-menu">
+									{% for submenu_key, submenu in menu.submenus %}
+										{% set submenu_active_class = (submenu_key == menu_current_key) ? 'active' : '' %}
+										<li class="{{ submenu_active_class }}">
+											<a href="{{ base_url() ~ submenu.route }}">
+												<i class="{{ submenu.icon_class }}"></i>
+												{{ submenu.label }}
+											</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+					{% endfor %}
+					</ul>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+                {% block backend_content_header %}{% endblock %}
+				
+                <!-- Main content -->
+                <section class="content">
+					{% block backend_content %}{% endblock %}
+				</section>
+            </aside><!-- /.right-side -->
+        </div><!-- ./wrapper -->
+
+        {% block backend_js %}
+		<!-- jQuery 2.0.2 -->
+		<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
+		
+		<!-- jQuery 1.11.1 -->
+        {{ asset_js('jquery.min.js') | raw }}
+		
+		<!-- Bootstrap -->
+		{{ asset_js('bootstrap.min.js') | raw }}
+		
+        <!-- AdminLTE App -->
+        {{ asset_js('AdminLTE/app.js') | raw }}
+		{% endblock %}
+    </body>
+</html>

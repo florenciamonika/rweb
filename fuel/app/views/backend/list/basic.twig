@@ -1,0 +1,142 @@
+{% extends "backend/template.twig" %}
+
+{% block backend_css %}
+	{{ parent() }}
+	<!-- dataTables css -->
+	{{ asset_css('datatables/dataTables.bootstrap.css') | raw }}
+{% endblock %}
+
+{% block backend_content_header %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>{# Set page title and subtitle manually #}
+		List
+		<small>Basic</small>
+	</h1>
+	{# Also set breadcrumb manually #}
+	<ol class="breadcrumb">
+		<li><a href="{{ base_url() }}backend">Home</a></li>
+		<li>List</li>
+		<li class="active">Basic</li>
+	</ol>
+</section>
+{% endblock %}
+
+{% block backend_content %}
+
+{% if success_message | length > 0 %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ success_message | raw }}
+</div>
+{% endif %}
+
+{% if error_message | length > 0 %}
+<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ error_message | raw }}
+</div>
+{% endif %}
+
+	<div class="box box-solid">
+		<div class="box-body text-right">
+			<button class="btn btn-default">Create</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-body table-responsive">
+					<table id="example1" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Rendering engine</th>
+							<th>Browser</th>
+							<th>Platform(s)</th>
+							<th>Engine version</th>
+							<th>CSS grade</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Trident 4</td>
+							<td>Internet Explorer 4.0</td>
+							<td>Win 95+</td>
+							<td> 4</td>
+							<td>X</td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="caret"></span>
+									</button>
+
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="">Edit</a></li>
+										<li><a class="btn-delete" data-url-delete="" href="#">Delete</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>Trident 5</td>
+							<td>Internet Explorer 5.0</td>
+							<td>Win 95+</td>
+							<td>5</td>
+							<td>C</td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="caret"></span>
+									</button>
+
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="">Edit</a></li>
+										<li><a class="btn-delete" data-url-delete="" href="#">Delete</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					</table>
+				</div><!-- /.box-body -->
+			</div><!-- /.box -->
+		</div>
+	</div>
+{% endblock %}
+		
+{% block backend_js %}
+	{{ parent() }}
+	<!-- DATA TABES SCRIPT -->
+	{{ asset_js('plugins/datatables/jquery.dataTables.js') | raw }}
+	{{ asset_js('plugins/datatables/dataTables.bootstrap.js') | raw }}
+	<!-- page script -->
+	<script type="text/javascript">
+		$(function() {
+			$("#example1").dataTable( {
+				"aoColumns": [ 
+					null,
+					null,
+					{ "bSearchable": false, "bSortable": false },
+					null,
+					null,
+					{ "bSearchable": false, "bSortable": false }
+				]
+			} );
+		} );
+	</script>
+	<!-- Dialog Confirmation Script -->
+	{{ asset_js('backend-dialog.js') | raw }}
+	<script type="text/javascript">
+		jQuery('#example1').on('click', '.btn-delete', function(e){
+			e.preventDefault();
+			var my = jQuery(this),
+				url_del = my.data('url-delete');
+			var yes_callback = function(e){
+				e.preventDefault();
+				jQuery(location).attr('href', url_del);
+			}
+			backend_dialog.show_dialog_confirm('Are you sure want to delete this?', yes_callback);
+		});
+	</script>
+{% endblock %}

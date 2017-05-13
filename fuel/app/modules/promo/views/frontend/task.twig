@@ -1,0 +1,86 @@
+{% extends "pages/views/template_frontend.twig" %}
+
+{% block frontend_css %}
+    <link rel="stylesheet" href="{{ base_url() }}assets/css/custom/task.css" />
+{% endblock %}
+
+{% block frontend_center_content %}
+    <div class="column task padd-footer">
+        <div class="medium-10 medium-centered columns">
+            <h3>Complete your task and get the Points !</h3>
+            
+            <div class="small-12 columns">
+                <div class="small-6 columns">
+                    <h4>Task {{ completed_task|length }}/5</h4>
+                </div>
+                <div class="small-12 columns content" data-equalizer="task">
+                    {% if list_task|length==0 %}
+                        <a href="{{ base_url() }}promo"><h5>Let's Join Some Promo</h5></a>
+                    {% endif %}
+                    {% for tasks in list_task %}
+                        <div class="small-12 medium-4 columns end task-box">
+                            <div class="title" data-equalizer-watch="task">
+                                <h5>{{ tasks.task.name }}</h5>
+                            </div>
+                            <div class="image-task">
+                                <div class="img">
+                                    <img src="{{ base_url()~tasks.task.get_image_path()~tasks.task.image }}">
+
+                                    {% if(tasks.task.type=='Like') %}
+                                        <div class="fb-like" id="{{tasks.task.id}}" data-href="{{ tasks.task.description }}" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+                                    {% elseif (tasks.task.type=='Share') %}
+                                        <a href="{{ base_url() }}{{ tasks.task.description }}">
+                                            <div class="click">
+                                                Click here
+                                            </div>
+                                        </a>
+                                    {% elseif (tasks.task.type=='Watch') %}
+                                        <a href="{{ base_url() }}watch/{{ tasks.task.id }}">
+                                            <div class="click">
+                                                Click here
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="poin">
+                                    <span>{{ tasks.task.point }} pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="small-12 columns">
+                <h4>Completed Today :</h4>
+                <div class="history">
+                    <ul>
+                    {% for completed in completed_task %}
+                        <li>{{ completed.task.name }} : {{ completed.task.point }} pts</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block frontend_js %}
+<script>
+
+
+console.log('a');
+
+function validlike(url){
+    $.ajax({
+        url : '{{ base_url() }}/done',
+        method : 'post',
+        data : { 'id':url, 'type':'Like'},
+        success : function(response) {
+            alert("Task done !");
+        }
+    });
+}
+</script>
+{% endblock %}

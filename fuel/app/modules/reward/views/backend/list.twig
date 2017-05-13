@@ -1,0 +1,121 @@
+{% extends "backend/template.twig" %}
+
+{% block backend_css %}
+    {{ parent() }}
+    <!-- dataTables css -->
+    {{ asset_css('datatables/dataTables.bootstrap.css') | raw }}
+{% endblock %}
+
+{% block backend_content_header %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>{# Set page title and subtitle manually #}
+            Brand
+            <small>List</small>
+        </h1>
+        {# Also set breadcrumb manually #}
+        <ol class="breadcrumb">
+            <li><a href="{{ base_url() }}backend">Home</a></li>
+            <li class="active">Brand List</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block backend_content %}
+
+    {% if success_message | length > 0 %}
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ success_message | raw }}
+        </div>
+    {% endif %}
+
+    {% if error_message | length > 0 %}
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ error_message | raw }}
+        </div>
+    {% endif %}
+
+    <div class="box box-solid">
+        <div class="box-body text-right">
+            <a href="{{ base_url() }}backend/brand/add">
+                <button class="btn btn-default">Create</button>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <table id="table-brand" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for brand in brand_list %}
+                                <tr>
+                                    <td>{{ brand.id }}</td>
+                                    <td>{{ brand.name }}</td>
+                                    <td>{{ brand.get_status_name() }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                Action <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="{{ base_url() }}backend/brand/edit/{{ brand.id }}">Edit</a></li>
+                                                <li><a class="btn-delete" data-url-delete="{{ base_url() }}backend/brand/delete/{{ brand.id }}" href="#">Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block backend_js %}
+    {{ parent() }}
+    <!-- DATA TABES SCRIPT -->
+    {{ asset_js('plugins/datatables/jquery.dataTables.js') | raw }}
+    {{ asset_js('plugins/datatables/dataTables.bootstrap.js') | raw }}
+    <!-- custom script -->
+    <script type="text/javascript">
+        $(function () {
+            $("#table-brand").dataTable({
+                "aoColumns": [
+                    null,
+                    null,
+                    null,
+                    {"bSearchable": false, "bSortable": false},
+                    {"bSearchable": false, "bSortable": false}
+                ]
+            });
+        });
+    </script>
+    <!-- Dialog Confirmation Script -->
+    {{ asset_js('backend-dialog.js') | raw }}
+    <script type="text/javascript">
+        jQuery('#table-brand').on('click', '.btn-delete', function (e) {
+            e.preventDefault();
+            var my = jQuery(this),
+                    url_del = my.data('url-delete');
+            var yes_callback = function (e) {
+                e.preventDefault();
+                jQuery(location).attr('href', url_del);
+            }
+            backend_dialog.show_dialog_confirm('Are you sure want to delete this?', yes_callback);
+        });
+
+    </script>
+{% endblock %}
